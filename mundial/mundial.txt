@@ -1,0 +1,148 @@
+CREATE TABLE Resultado (
+                id_resultado VARCHAR NOT NULL,
+                puntos INTEGER NOT NULL,
+                PG INTEGER NOT NULL,
+                PE INTEGER NOT NULL,
+                PP INTEGER NOT NULL,
+                DG INTEGER NOT NULL,
+                CONSTRAINT resultado_pk PRIMARY KEY (id_resultado)
+);
+
+
+CREATE TABLE Arbitro (
+                cod_arbitro VARCHAR NOT NULL,
+                funcion VARCHAR NOT NULL,
+                CONSTRAINT arbitro_pk PRIMARY KEY (cod_arbitro)
+);
+
+
+CREATE TABLE Fase (
+                id_fase VARCHAR NOT NULL,
+                descipcion VARCHAR NOT NULL,
+                CONSTRAINT fase_pk PRIMARY KEY (id_fase)
+);
+
+
+CREATE TABLE Sede (
+                id VARCHAR NOT NULL,
+                nombre VARCHAR NOT NULL,
+                CONSTRAINT sede_pk PRIMARY KEY (id)
+);
+
+
+CREATE TABLE Partido (
+                cod_partido VARCHAR NOT NULL,
+                arbitro VARCHAR NOT NULL,
+                id_fase VARCHAR NOT NULL,
+                cod_arbitro VARCHAR NOT NULL,
+                id VARCHAR NOT NULL,
+                CONSTRAINT partido_pk PRIMARY KEY (cod_partido)
+);
+
+
+CREATE TABLE Grupo (
+                cod_grupo VARCHAR NOT NULL,
+                nombre VARCHAR NOT NULL,
+                CONSTRAINT grupo_pk PRIMARY KEY (cod_grupo)
+);
+
+
+CREATE TABLE Equipo (
+                cod_equipo VARCHAR NOT NULL,
+                nombre VARCHAR NOT NULL,
+                DT VARCHAR NOT NULL,
+                cod_grupo VARCHAR NOT NULL,
+                CONSTRAINT equipo_pk PRIMARY KEY (cod_equipo)
+);
+
+
+CREATE TABLE Posicion (
+                id INTEGER NOT NULL,
+                nombre VARCHAR NOT NULL,
+                CONSTRAINT posicion_pk PRIMARY KEY (id)
+);
+
+
+CREATE TABLE jugador (
+                id_jugador VARCHAR NOT NULL,
+                nombre VARCHAR NOT NULL,
+                numero_camiseta INTEGER NOT NULL,
+                cod_equipo VARCHAR NOT NULL,
+                id INTEGER NOT NULL,
+                CONSTRAINT jugador_pk PRIMARY KEY (id_jugador)
+);
+
+
+CREATE TABLE det_partido (
+                cod BIGINT NOT NULL,
+                descripcion VARCHAR NOT NULL,
+                duracion VARCHAR NOT NULL,
+                cod_partido VARCHAR NOT NULL,
+                id_jugador VARCHAR NOT NULL,
+                id_resultado VARCHAR NOT NULL,
+                CONSTRAINT det_partido_pk PRIMARY KEY (cod)
+);
+
+
+ALTER TABLE det_partido ADD CONSTRAINT resultado_det_partido_fk
+FOREIGN KEY (id_resultado)
+REFERENCES Resultado (id_resultado)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE Partido ADD CONSTRAINT arbitro_partido_fk
+FOREIGN KEY (cod_arbitro)
+REFERENCES Arbitro (cod_arbitro)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE Partido ADD CONSTRAINT fase_partido_fk
+FOREIGN KEY (id_fase)
+REFERENCES Fase (id_fase)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE Partido ADD CONSTRAINT sede_partido_fk
+FOREIGN KEY (id)
+REFERENCES Sede (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE det_partido ADD CONSTRAINT partido_det_partido_fk
+FOREIGN KEY (cod_partido)
+REFERENCES Partido (cod_partido)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE Equipo ADD CONSTRAINT grupo_equipo_fk
+FOREIGN KEY (cod_grupo)
+REFERENCES Grupo (cod_grupo)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE jugador ADD CONSTRAINT equipo_jugador_fk
+FOREIGN KEY (cod_equipo)
+REFERENCES Equipo (cod_equipo)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE jugador ADD CONSTRAINT posicion_jugador_fk
+FOREIGN KEY (id)
+REFERENCES Posicion (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE det_partido ADD CONSTRAINT jugador_det_partido_fk
+FOREIGN KEY (id_jugador)
+REFERENCES jugador (id_jugador)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
